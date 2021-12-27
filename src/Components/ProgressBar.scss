@@ -1,0 +1,42 @@
+.progress {
+    width: 140%;
+    margin-top: 26px;
+    margin-bottom: 50px;
+    margin-left: -95px;
+    background: white;
+    height: 0.05rem;
+
+    
+    &[name = pomodoroBtn] {
+        &::-webkit-progress-bar {
+            background: rgb(190, 75, 71);
+            transition: background-color 1s
+        }
+    }
+
+    &[name = shortBtn] {
+        &::-webkit-progress-bar {
+            background: rgb(68, 131, 136);
+            transition: background-color 1s
+        }
+    }
+
+    &[name = longBtn] {
+        &::-webkit-progress-bar {
+            background: rgb(58, 103, 134);
+            transition: background-color 1s
+        };
+    }
+    
+    &::-webkit-progress-value {
+        height: 0.20rem;
+        background: white;
+        transform: translateY(-1.5px);
+        border-radius: 6px;
+    }
+
+    &::-webkit-progress-bar {
+        background: rgb(190, 75, 71);
+    }
+    
+}

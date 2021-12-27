@@ -1,0 +1,40 @@
+.ListDisplay {
+    display: flex;
+    background-color: rgba(221,102,98,255);
+    height: 70px;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid;
+    border-top-color: white ;
+
+    &[name = pomodoroBtn] {
+        background-color: rgba(221,102,98,255);
+        transition: background-color 1s;
+    }
+
+    &[name = shortBtn] {
+        background-color: rgba(94,156,160,255);
+        transition: background-color 1s;
+    }
+
+    &[name = longBtn] {
+        background-color: rgba(88,137,172,255);
+        transition: background-color 1s;
+    }
+
+    .text {
+        font-size: 15px;
+        font-weight: 1;
+        margin-right: 8px;
+        margin-top: 8px;
+        opacity: 0.7;
+    }
+
+    .value {
+        font-size: 24px;
+        font-weight: bold;
+        margin-right: 20px;
+        margin-top: 1px;
+    }
+}

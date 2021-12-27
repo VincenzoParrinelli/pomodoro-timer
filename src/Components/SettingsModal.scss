@@ -1,0 +1,124 @@
+.top-container {
+    display: flex;
+    position: relative;
+    bottom: 18px;
+
+    .p1 {
+        color: grey;
+        opacity: 0.8;
+        font-weight: bold;
+    }
+
+    .closeBtn {
+        border: none;
+        background-color: white;
+        position: relative;
+        left: 200px;
+        font-size: 22px;
+        color: grey;
+        opacity: 0.8;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 1;
+        }
+    }
+}
+
+.separator {
+    background-color: grey;
+    opacity: 0.2;
+    border-width: 1px;
+    position: relative;
+    bottom: 26px;
+}
+
+.body-container {
+    display: flex;
+    margin-top: -30px;
+    margin-bottom: -20px;
+    .p2 {
+        font-weight: bold;
+        opacity: 0.7;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        top: 60px;
+        left: 140px;
+
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            
+            &:checked + .slider {
+                background-color: #30cc1c;
+
+                &:before {
+                    -webkit-transform: translateX(26px);
+                    -ms-transform: translateX(26px);
+                    transform: translateX(26px);
+                }
+            }
+
+
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 34px;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+
+            &::before { 
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+                border-radius: 34px;
+            }
+        }
+    }
+    
+}
+
+.body-container2 {
+    display: flex;
+    .p3 {
+        font-size: 14px;
+        font-weight: bold;
+        opacity: 0.3;
+        margin-left: 30px;
+        margin-bottom: 1px;
+    }
+}
+
+
+.body-container3 {
+    display: flex;
+    .timeinput {
+        border: none;
+        border-radius: 4px;
+        height: 30px;
+        background-color: rgb(235, 235, 235);
+        outline: none;
+        width: 100px;
+        margin-right: 25px;
+    }
+}
+

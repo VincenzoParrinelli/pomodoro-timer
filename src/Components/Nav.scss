@@ -1,0 +1,39 @@
+.Nav {
+    display: inline-block;
+    justify-content: space-around;
+    align-items: center;
+    button {
+        font-family: Arial;
+        font-size: 16px;
+        font-weight: 200;
+        width: 120px;
+        height: 30px;
+        margin: 16px;
+        text-align: center;
+        border-radius: 8px;
+        border: none;
+        background-color: rgba(221,102,98,255);
+        color: white;
+
+        &[name="pomodoro"][value = "true"]{
+            background-color: rgba(0, 0, 0, 0.15);
+            transform: translateY(1px);
+            font-weight: 550;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:active {
+            background-color: rgba(0, 0, 0, 0.15);
+            transform: translateY(2px);
+        }
+
+        &:focus {
+            background-color: rgba(0, 0, 0, 0.15);
+            font-weight: 550;
+        }
+
+    }
+}

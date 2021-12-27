@@ -1,0 +1,49 @@
+.btn {
+    height: 51px; 
+    width: 190px; 
+    margin: -20px -95px; 
+    position: relative;
+    top: 6%; 
+    left: 50%;
+    font-size: 20px;
+    border-radius: 5px;
+    border: none;
+    color: #CD5C5C;
+    font-family: "Arial";
+    font-weight: bold;
+
+    &.red {
+        color: rgba(221,102,98,255);
+        transition: color 1s;
+    }
+    
+    &.lblue {
+        color: rgba(94,156,160,255);
+        transition: color 1s;
+    }
+
+    &.blue { 
+        color: rgba(88,137,172,255);
+        transition: color 1s;
+    }
+
+
+    &[name="START"]{
+        box-shadow: 0 5px rgba(255, 255, 255, 0.75);
+        transform: translateY(1px);
+    }
+
+    &[name="STOP"]{
+        top: 22.9px;
+        margin-top: -20px;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        top: 8%;
+        box-shadow: none;
+    }
+}
