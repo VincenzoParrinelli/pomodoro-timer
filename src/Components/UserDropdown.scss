@@ -1,58 +1,38 @@
-.ellipsis {
-    height: 22px;
-    margin-left: 456px;
+.default-propic {
+    display: inline-flex;
+    height: 30px;
     position: relative;
-    padding: 5px;
-    border-radius: 5px;
-
+    left: 246px;
+    top: 30px;
+    
     &:hover {
+        opacity: 0.8;
         cursor: pointer;
     }
-    
 
-    &[name = pomodoroBtn] {
-        background-color: rgba(221,102,98,255);
-        transition: background-color 1s;
-    }
-
-    &[name = shortBtn] {
-        background-color: rgba(94,156,160,255);
-        transition: background-color 1s;
-    }
-
-    &[name = longBtn] {
-        background-color: rgba(88,137,172,255);
-        transition: background-color 1s;
-    }
-
-    &:active {
-        transform: translateY(2px);
-    }
 }
 
-.dropdown {
+
+.userDropdown {
     background-color: white;
-    border-radius: 3px;
+    border-radius: 5px;
     width: 200px;
-    height: 75px;
+    height: 106px;
     position: absolute;
-    margin-top: 6px;
-    margin-left: 288px;
+    margin-top: 30px;
+    margin-left: 76px;
     color: black;
     font-size: 14px;
     z-index: 1;
-    font-weight: normal;
+    font-weight: 100;
     box-shadow: -1px 1px 1em rgba(0, 0, 0, 0.24);
 
-
+    
     .functions-container {
         position: relative;
         height: 35px;
-        top: -6px;
         border-radius: 4px;
-        margin-top: 10px;
-        
-
+       
         &:hover {
             background-color: rgb(236, 235, 235);
             cursor: pointer;
@@ -62,15 +42,16 @@
             display: flex;
             cursor: pointer;
             align-items: center;
-            margin-top: 8px;
             padding: 10px 16px;
             opacity: 0.8;
-
+            
             img {
+                position: relative;
+                bottom: 1px;
                 margin-right: 8px;
                 width: 14px;
                 opacity: 1;
             }
-        }  
+        }
     }
 }

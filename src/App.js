@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import './App.scss'
 import Button from "./Components/Button"
 import Display from "./Components/Display"
@@ -15,6 +15,8 @@ import forwardbtn from "./Icons/forward-btn.png"
 import settings from "./Icons/settings.png"
 import Tasks from "./Components/Tasks"
 import SettingsModal from "./Components/SettingsModal"
+import { UserContext } from "./Router"
+import UserDropdown from "./Components/UserDropdown"
 
 
 export const mainContext = React.createContext()
@@ -37,6 +39,10 @@ export default function App() {
   const app = useRef(null)
   const nav = useRef(null)
   const forward = useRef(null)
+
+  const navigate = useNavigate()
+
+  const { isLogged, payload } = useContext(UserContext)
 
   var stringtoInt = timer.split(":").join("").toString()
   var stringtoInt2 = timer2.split(":").join("").toString()
@@ -377,18 +383,28 @@ export default function App() {
             setTimer3={setTimer3}
           />
         }
-        <button
-          className="settings"
-          style={{ right: "435px" }}
-          name={
-            pomodoroBtn ? "pomodoroBtn" :
-              shortBtn ? "shortBtn" :
-                longBtn ? "longBtn" : "pomodoroBtn"
-          }
-        >
 
-          <Link to="/login" style={{ textDecoration: "none", color: "white" }}> Login </Link>
-        </button>
+          {!isLogged ? (
+            <button
+              className="settings"
+              style={{ right: "435px" }}
+              name={
+                pomodoroBtn ? "pomodoroBtn" :
+                  shortBtn ? "shortBtn" :
+                    longBtn ? "longBtn" : "pomodoroBtn"
+              }
+
+              onClick={() => navigate("/login")}
+            >
+              Login
+
+            </button>
+          )
+            :
+            (
+              <UserDropdown />
+            )}
+
 
       </header>
       <br />

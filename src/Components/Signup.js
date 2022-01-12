@@ -6,6 +6,7 @@ import "./Signup.scss"
 export default function Signup() {
     const [email, setEmail] = useState("")
     const [isValid, setIsValid] = useState(true)
+    const [isPresent, setIsPresent] = useState(false)
     const [emailSent, setEmailSent] = useState(false)
     const navigate = useNavigate()
 
@@ -18,14 +19,14 @@ export default function Signup() {
     const submitEmail = async (e) => {
         e.preventDefault()
 
-        await axios.post("https://pomodoroclock.herokuapp.com/send_email", {
+        await axios.post("http://localhost:5000/send_email", {
             email
 
         }).then((res) => {
-
             setIsValid(res.data.isValid)
             setEmailSent(res.data.emailSent)
-
+            setIsPresent(res.data.isPresent)
+           
         }).catch(err => console.error(err.message))
 
     }
@@ -47,6 +48,13 @@ export default function Signup() {
                         Please input valid email
                     </div>
                 )}
+
+                {isPresent && (
+                    <div className="isvalid-email">
+                        Email exists already 
+                    </div>
+                )}
+
 
                 <button
                     className="submit-btn"

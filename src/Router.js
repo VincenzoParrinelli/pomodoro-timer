@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext, useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import App from "./App"
 import Login from "./Components/Login"
@@ -7,21 +7,26 @@ import Test from "./Components/test"
 import EmailSent from './Components/EmailSent'
 import NewPassword from './Components/NewPassword'
 
+export const UserContext = createContext(null)
+
 export default function Router() {
+    const [isLogged, setIsLogged] = useState(false)
+    const [payload, setPayload] = useState(null)
+
 
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<App />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/test" element={<Test />} />
-                <Route path="/email_sent" element={<EmailSent />} />
-                <Route path="/new_password/:token" element={<NewPassword />} />
-                <Route path="/new_password" element={<NewPassword />} />
+            <UserContext.Provider value={{ isLogged, setIsLogged, payload, setPayload }}>
+                <Routes>
+                    <Route path="/" element={<App />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/test" element={<Test />} />
+                    <Route path="/email_sent" element={<EmailSent />} />
+                    <Route path="/new_password/:token" element={<NewPassword />} />
 
-
-            </Routes>
+                </Routes>
+            </UserContext.Provider>
         </BrowserRouter>
     )
 }
