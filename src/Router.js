@@ -8,24 +8,41 @@ import EmailSent from './Components/EmailSent'
 import NewPassword from './Components/NewPassword'
 
 export const UserContext = createContext(null)
+export const ProPicContext = createContext(null)
 
 export default function Router() {
     const [isLogged, setIsLogged] = useState(false)
-    const [payload, setPayload] = useState(null)
+    const [payload, setPayload] = useState({})
+    const [profilePicId, setProfilePicId] = useState(null)
+    const [uploadedFlag, setUploadedFlag] = useState(false)
+    const [proPic, setProPic] = useState(null)
 
 
     return (
         <BrowserRouter>
             <UserContext.Provider value={{ isLogged, setIsLogged, payload, setPayload }}>
-                <Routes>
-                    <Route path="/" element={<App />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/test" element={<Test />} />
-                    <Route path="/email_sent" element={<EmailSent />} />
-                    <Route path="/new_password/:token" element={<NewPassword />} />
+                <ProPicContext.Provider
+                    value={
+                        {
+                            profilePicId,
+                            setProfilePicId,
+                            uploadedFlag,
+                            setUploadedFlag,
+                            proPic, 
+                            setProPic
+                        }
+                    }
+                >
+                    <Routes>
+                        <Route path="/" element={<App />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/test" element={<Test />} />
+                        <Route path="/email_sent" element={<EmailSent />} />
+                        <Route path="/new_password/:token" element={<NewPassword />} />
 
-                </Routes>
+                    </Routes>
+                </ProPicContext.Provider>
             </UserContext.Provider>
         </BrowserRouter>
     )

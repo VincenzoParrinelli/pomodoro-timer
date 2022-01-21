@@ -384,26 +384,26 @@ export default function App() {
           />
         }
 
-          {!isLogged ? (
-            <button
-              className="settings"
-              style={{ right: "435px" }}
-              name={
-                pomodoroBtn ? "pomodoroBtn" :
-                  shortBtn ? "shortBtn" :
-                    longBtn ? "longBtn" : "pomodoroBtn"
-              }
+        {!isLogged ? (
+          <button
+            className="settings"
+            style={{ right: "435px" }}
+            name={
+              pomodoroBtn ? "pomodoroBtn" :
+                shortBtn ? "shortBtn" :
+                  longBtn ? "longBtn" : "pomodoroBtn"
+            }
 
-              onClick={() => navigate("/login")}
-            >
-              Login
+            onClick={() => navigate("/login")}
+          >
+            Login
 
-            </button>
-          )
-            :
-            (
-              <UserDropdown />
-            )}
+          </button>
+        )
+          :
+          (
+            <UserDropdown />
+          )}
 
 
       </header>

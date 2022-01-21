@@ -5,8 +5,11 @@ import user from "../Icons/user.png"
 import logoutBlack from "../Icons/logout-black.png"
 import bin from "../Icons/bin.png"
 import "./UserDropdown.scss"
-import { UserContext } from '../Router'
+import { UserContext, ProPicContext } from '../Router'
 import axios from "axios"
+import { storage } from '../base'
+import { getDownloadURL, ref } from "firebase/storage"
+
 
 export default function UserDropdown() {
     const [userDropdown, setUserDropdown] = useState(false)
@@ -14,6 +17,34 @@ export default function UserDropdown() {
     const body = useRef(null)
 
     const { setIsLogged, payload, setPayload } = useContext(UserContext)
+    const { profilePicId, uploadedFlag, proPic, setProPic } = useContext(ProPicContext)
+
+    useEffect(async () => {
+        await axios.post("http://localhost:5000/getPrevProPicId", { payload }).then(async (res) => {
+
+            var proPicRef = ref(storage, `proPics/${res.data.profilePicId}`)
+
+            await getDownloadURL(proPicRef).then(pic => {
+                setProPic(pic)
+
+            }).catch(err => console.error(err.message))
+        }).catch(err => console.error(err.message))
+    }, [])
+
+    useEffect(async () => {
+
+        if (profilePicId === null) return
+
+        if (uploadedFlag) {
+            var proPicRef = ref(storage, `proPics/${profilePicId}`)
+
+            await getDownloadURL(proPicRef).then(pic => {
+                setProPic(pic)
+
+            }).catch(err => console.error(err.message))
+        }
+
+    }, [uploadedFlag])
 
     useEffect(() => {
         document.addEventListener("mousedown", (e) => {
@@ -59,11 +90,13 @@ export default function UserDropdown() {
 
     return (
         <div ref={body}>
+
             <img
                 className="default-propic"
-                src={defaultProPic}
+                src={proPic ? proPic : defaultProPic}
                 onClick={() => setUserDropdown(!userDropdown)}
             />
+
 
             {userDropdown && (
                 <div className="userDropdown">
@@ -88,9 +121,11 @@ export default function UserDropdown() {
             )}
 
             <UserContext.Provider value={{ profileModal, setProfileModal, payload, setPayload }}>
+
                 {profileModal && (
                     <ProfileModal />
                 )}
+
             </UserContext.Provider>
         </div>
     )

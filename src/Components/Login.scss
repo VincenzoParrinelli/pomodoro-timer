@@ -6,7 +6,13 @@
     transform: translate(-50%, -50%);
     text-align: center;
     font-family: Arial, sans-serif;
-    
+
+    .logo {
+        position: relative;
+        left: -10px;
+        bottom: 20px;
+    }
+
     p {
         font-size: 18px;
         font-weight: bold;
@@ -17,13 +23,15 @@
     }
 
     .login-form {
+        position: relative;
         background-color: white;
         width: 350px;
         height: 400px;
         border-radius: 8px;
         font-size: 13px;
         font-weight: bold;
-
+        left: 50px;
+    
         label, input {
             position: relative;
             top: 110px;
@@ -32,7 +40,6 @@
             justify-content: left;
             color: black;
             margin-bottom: 14px;
-            
         }
 
         label {
@@ -42,17 +49,30 @@
 
         input {
             left: 18px;
-            background-color: lightgrey;
+            background-color: rgb(225, 225, 225);
             border: none;
             outline: none;
             border-radius: 6px;
             padding: 10px;
-            width: 21.8em;
-            height: 1.8em;
+            width: 18.4em;
+            height: 1.5em;
             justify-content: center;
             align-items: center;
-            opacity: 0.4;
+            font-size: 16px;
+            opacity: 0.8;
+
+            &::placeholder {
+                opacity: 0.4;
+            }
+            
         }
+
+        .isvalid {
+            color: red;
+            position: relative;
+            top: 113px;
+        }
+
 
         .submit-btn {
             position: relative;
@@ -70,6 +90,10 @@
                 cursor: pointer;
                 opacity: 0.9;
             }
+
+            &:active {
+                transform: translate(0, 5%);
+            }
         }
        
     }
@@ -82,12 +106,23 @@
         opacity: 1;
     }
 
-    .create-account {
-        position: relative;
-        top: 10px;
-        color: white;
-        font-size: 15px;
-        font-weight: bold;
-        letter-spacing: 0.02em;
+    button {
+        background-color: rgb(217, 85, 80);
+        border: none;
+
+        .create-account {
+            position: relative;
+            top: 9px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.02em;
+        }
+
+        &:active {
+            transform: translate(0, 15%);
+        }
+
     }
+
 }

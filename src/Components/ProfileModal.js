@@ -1,88 +1,72 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Modal from "react-modal"
 import axios from "axios"
-import { UserContext } from '../Router'
+import { UserContext, ProPicContext } from '../Router'
 import "./ProfileModal.scss"
+import defaultProPic from "../Icons/default-profilepic.png"
+import plus from "../Icons/plus.png"
+import { storage } from '../base'
+import { uploadBytes, ref, deleteObject } from 'firebase/storage'
+import { v4 as uuidv4 } from "uuid"
 
 export default function ProfileModal() {
     const { profileModal, setProfileModal, payload, setPayload } = useContext(UserContext)
-    const [userName, setUserName] = useState(payload.username)
-    const [prevPayload, setPrevPayload] = useState({})
+    const { setProfilePicId, setUploadedFlag, proPic } = useContext(ProPicContext)
+    const [userName, setUserName] = useState("")
     const [profilePic, setProfilePic] = useState(null)
-    const [prevFormData, setPrevFormData] = useState(null)
-    const [formData, setFormData] = useState(null)
 
 
     useEffect(() => {
         setUserName(payload.username)
     }, [profileModal])
 
+
     const updateUser = async () => {
+
+        setUploadedFlag(false)
+
         setProfileModal(false)
 
+        deletePrevPic()
 
-        //console.log(formData.get("image").name)
-        //console.log(prevFormData.get("image").name)
+        setPayload({ ...payload, profilePicId: uuidv4() })
 
+        const proPicRef = ref(storage, `proPics/${payload.profilePicId}`)
 
-        // if (prevPayload.username === payload.username) return
-        // if (prevFormData.get("image") === formData.get("image")) return
+        setProfilePicId(payload.profilePicId)
 
+        await axios.put("http://localhost:5000/update-user", { payload }).then(async res => {
 
-        await axios.delete("http://localhost:5000/delete-profilePic",
-            payload
-        ).then(async (res) => {
+            await uploadBytes(proPicRef, profilePic).
+                catch(err => console.error(err.message))
+
             setUserName(res.data.username)
-
+            setUploadedFlag(true)
         }).catch(err => console.error(err.message))
 
-
-        await axios.put("http://localhost:5000/update-user",
-            formData,
-        ).then((res) => {
-
-        }).catch(err => console.error(err.message))
     }
 
+    const deletePrevPic = async () => {
+
+        await axios.post("http://localhost:5000/getPrevProPicId", { payload }).then(async res => {
+            const prevProPicId = res.data.profilePicId
+
+            const prevProPic = ref(storage, `proPics/${prevProPicId}`)
+
+            await deleteObject(prevProPic)
+                .catch(err => console.error(err.message))
+
+        })
+
+    }
+
+
     useEffect(() => {
-        if (payload.username) {
-            setPrevPayload({ ...payload })
-        }
+
+        setPayload({ ...payload, username: userName })
+
     }, [userName])
 
-
-    /*useEffect(() => {
-        if (formData) {
-            setPrevFormData(formData)
-        }
-    }, [formData])*/
-
-
-    useEffect(() => {
-        var subscribeToApi = true
-
-        if (subscribeToApi) {
-
-            if (profilePic) {
-                var formData = new FormData()
-
-                formData.append("image", profilePic, profilePic.name)
-                formData.append("id", payload._id)
-                formData.append("username", userName)
-
-                setPrevFormData(formData)
-                setFormData(formData)
-
-            }
-
-            setPayload({ ...payload, username: userName ? userName : payload.username })
-
-        }
-
-        return () => {
-            subscribeToApi = false
-        }
-    }, [userName, profilePic])
 
 
     return (
@@ -114,11 +98,20 @@ export default function ProfileModal() {
                     <p>PROFILE</p>
                     <button className="closeBtn2" onClick={() => setProfileModal(false)}>X</button>
 
-                    <input
-                        type="file"
-                        accept='.jpg, .png'
-                        onChange={e => setProfilePic(e.target.files[0])}
-                    />
+                    <label className="propic-changer">
+
+                        <img src={proPic ? proPic : defaultProPic} className="current-propic" />
+
+                        <div className="plus-container">
+                            <img src={plus} className='plus' />
+                        </div>
+
+                        <input
+                            type="file"
+                            accept='.jpg, .png'
+                            onChange={e => setProfilePic(e.target.files[0])}
+                        />
+                    </label>
 
                     <textarea
                         style={{ textDecoration: "none" }}

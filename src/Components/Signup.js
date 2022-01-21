@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios"
+import logo from "../Icons/logo.png"
 import { Link, useNavigate } from "react-router-dom"
 import "./Signup.scss"
 
@@ -26,14 +27,17 @@ export default function Signup() {
             setIsValid(res.data.isValid)
             setEmailSent(res.data.emailSent)
             setIsPresent(res.data.isPresent)
-           
+            
         }).catch(err => console.error(err.message))
 
     }
 
     return (
         <div className="Signup">
+            <Link to="/"><img src={logo} className="logo" /></Link>
+
             <p>Create Account</p>
+
             <form className="signup-form">
                 <label>EMAIL</label>
                 <input
@@ -51,7 +55,7 @@ export default function Signup() {
 
                 {isPresent && (
                     <div className="isvalid-email">
-                        Email exists already 
+                        Email exists already
                     </div>
                 )}
 
@@ -68,7 +72,7 @@ export default function Signup() {
 
             <p>Already have an account?</p>
 
-            <Link to="/login" className="log-in">Log In</Link>
+            <button> <Link to="/login" className="log-in">Log In</Link> </button>
         </div>
     )
 }

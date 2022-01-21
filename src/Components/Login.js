@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
+import logo from "../Icons/logo.png"
 import "./Login.scss"
 import { UserContext } from '../Router'
 
@@ -8,8 +9,9 @@ export default function Login() {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [isValid, setIsValid] = useState({ email: true, password: true })
     const { isLogged, setIsLogged } = useContext(UserContext)
-    const { payload, setPayload } = useContext(UserContext)
+    const { setPayload } = useContext(UserContext)
 
     const navigate = useNavigate()
 
@@ -21,6 +23,7 @@ export default function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+
         await axios.post("http://localhost:5000/login", {
             email, password
 
@@ -28,15 +31,19 @@ export default function Login() {
 
             setIsLogged(res.data.isLogged)
             setPayload(res.data.payload)
-
+            setIsValid(res.data.isValid)
+            
         }).catch(err => console.error(err.message))
     }
 
     return (
         <div className="Login">
+            <Link to="/"><img src={logo} className="logo" /></Link>
+
             <p>Login</p>
             <form className="login-form">
                 <label>EMAIL</label>
+
                 <input
                     type="email"
                     required
@@ -51,6 +58,20 @@ export default function Login() {
                     onChange={e => setPassword(e.target.value)}
                 />
 
+                {!isValid.email && (
+                    <div className="isvalid">
+                        Please input valid email
+                    </div>
+                )}
+
+                {!isValid.password && (
+                    <div className="isvalid">
+                        Please input valid password
+                    </div>
+                )}
+
+
+
                 <button
                     className="submit-btn"
                     type="submit"
@@ -64,7 +85,7 @@ export default function Login() {
 
             <p>Do not have an account?</p>
 
-            <Link to="/signup" className="create-account">Create account</Link>
+            <button> <Link to="/signup" className="create-account">Create account</Link> </button>
         </div>
     )
 }
