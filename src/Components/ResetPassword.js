@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from "axios"
 import logo from "../Icons/logo.png"
 import { Link, useNavigate } from "react-router-dom"
-import "./Signup.scss"
+import "./ResetPassword.scss"
 
-export default function Signup() {
+
+export default function ResetPassword() {
     const [email, setEmail] = useState("")
     const [isValid, setIsValid] = useState(true)
-    const [isPresent, setIsPresent] = useState(false)
+    const [isPresent, setIsPresent] = useState(true)
     const [emailSent, setEmailSent] = useState(false)
     const navigate = useNavigate()
 
@@ -17,28 +18,39 @@ export default function Signup() {
         }
     }, [emailSent])
 
-    const submitEmail = async (e) => {
+
+    const resetPassword = async e => {
         e.preventDefault()
 
-        await axios.post("http://localhost:5000/send_email", {
+        await axios.post("http://localhost:5000/reset-password", {
             email
+        }).then(async res => {
 
-        }).then((res) => {
             setIsValid(res.data.isValid)
-            setEmailSent(res.data.emailSent)
             setIsPresent(res.data.isPresent)
-            
-        }).catch(err => console.error(err.message))
 
+            if (isValid && isPresent) {
+                await axios.post("http://localhost:5000/send-reset-email", {
+                    email
+                }).then(res => {
+
+                    setEmailSent(res.data.emailSent)
+                    setIsValid(res.data.isValid)
+                    setIsPresent(res.data.isPresent)
+
+                }).catch(err => console.error(err.message))
+            }
+
+        }).catch(err => console.error(err.message))
     }
 
     return (
-        <div className="Signup">
+        <div className="ResetPassword">
             <Link to="/"><img src={logo} className="logo" /></Link>
 
-            <p>Create Account</p>
+            <p>Reset Password</p>
 
-            <form className="signup-form">
+            <form className="email-form">
                 <label>EMAIL</label>
                 <input
                     type="email"
@@ -53,23 +65,21 @@ export default function Signup() {
                     </div>
                 )}
 
-                {isPresent && (
+                {!isPresent && (
                     <div className="isvalid-email">
-                        Email exists already
+                        Email Doesn't Exist
                     </div>
                 )}
 
                 <button
                     className="submit-btn"
                     type="submit"
-                    onClick={e => submitEmail(e)}
+                    onClick={e => resetPassword(e)}
                 >
-                    Sign up with Email
+                    Reset Password
                 </button>
 
             </form>
-
-            <p>Already have an account?</p>
 
             <button> <Link to="/login" className="log-in">Log In</Link> </button>
         </div>

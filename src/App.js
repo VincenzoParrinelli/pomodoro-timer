@@ -42,7 +42,7 @@ export default function App() {
 
   const navigate = useNavigate()
 
-  const { isLogged, payload } = useContext(UserContext)
+  const { isLogged } = useContext(UserContext)
 
   var stringtoInt = timer.split(":").join("").toString()
   var stringtoInt2 = timer2.split(":").join("").toString()

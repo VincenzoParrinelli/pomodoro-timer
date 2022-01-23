@@ -8,7 +8,7 @@ import "./UserDropdown.scss"
 import { UserContext, ProPicContext } from '../Router'
 import axios from "axios"
 import { storage } from '../base'
-import { getDownloadURL, ref } from "firebase/storage"
+import { getDownloadURL, ref, deleteObject } from "firebase/storage"
 
 
 export default function UserDropdown() {
@@ -77,9 +77,14 @@ export default function UserDropdown() {
         setUserDropdown(false)
 
         if (window.confirm("Are you sure you want to delete your account? This operation can not be undone.")) {
+            const proPic = ref(storage, `proPics/${payload.profilePicId}`)
+
+            await deleteObject(proPic)
+                .catch(err => console.error(err.message))
+
             await axios.delete("http://localhost:5000/delete-user", {
                 payload
-            }).then((res) => {
+            }).then(async res => {
                 if (res.data.isDeleted !== 0) {
                     setPayload(null)
                     setIsLogged(false)

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import logo from "../Icons/logo.png"
+import { Link } from "react-router-dom"
 import "./NewPassword.scss"
 
 export default function NewPassword() {
@@ -57,7 +59,11 @@ export default function NewPassword() {
     return (
         <div>
             <div className="NewPassword">
+
+                <Link to="/"><img src={logo} className="logo" /></Link>
+
                 <p>Set New Password</p>
+
                 <form className="password-form">
                     <label>PASSWORD</label>
                     <input

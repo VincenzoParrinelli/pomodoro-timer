@@ -6,6 +6,7 @@ import Signup from "./Components/Signup"
 import Test from "./Components/test"
 import EmailSent from './Components/EmailSent'
 import NewPassword from './Components/NewPassword'
+import ResetPassword from './Components/ResetPassword'
 
 export const UserContext = createContext(null)
 export const ProPicContext = createContext(null)
@@ -29,7 +30,7 @@ export default function Router() {
                             uploadedFlag,
                             setUploadedFlag,
                             proPic, 
-                            setProPic
+                            setProPic,
                         }
                     }
                 >
@@ -40,6 +41,7 @@ export default function Router() {
                         <Route path="/test" element={<Test />} />
                         <Route path="/email_sent" element={<EmailSent />} />
                         <Route path="/new_password/:token" element={<NewPassword />} />
+                        <Route path="/reset-password" element={<ResetPassword />} />
 
                     </Routes>
                 </ProPicContext.Provider>

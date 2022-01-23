@@ -11,14 +11,23 @@ import { v4 as uuidv4 } from "uuid"
 
 export default function ProfileModal() {
     const { profileModal, setProfileModal, payload, setPayload } = useContext(UserContext)
-    const { setProfilePicId, setUploadedFlag, proPic } = useContext(ProPicContext)
+    const { setProfilePicId, setUploadedFlag, uploadedFlag, proPic } = useContext(ProPicContext)
     const [userName, setUserName] = useState("")
     const [profilePic, setProfilePic] = useState(null)
-
+    const [currentImage, setCurrentImage] = useState(null)
 
     useEffect(() => {
+
         setUserName(payload.username)
+        
     }, [profileModal])
+
+    useEffect(() => {
+
+        if (!profilePic) return
+        setCurrentImage(URL.createObjectURL(profilePic))
+
+    }, [profilePic])
 
 
     const updateUser = async () => {
@@ -31,18 +40,20 @@ export default function ProfileModal() {
 
         setPayload({ ...payload, profilePicId: uuidv4() })
 
-        const proPicRef = ref(storage, `proPics/${payload.profilePicId}`)
+        if (payload.profilePicId) {
+            const proPicRef = ref(storage, `proPics/${payload.profilePicId}`)
 
-        setProfilePicId(payload.profilePicId)
+            setProfilePicId(payload.profilePicId)
 
-        await axios.put("http://localhost:5000/update-user", { payload }).then(async res => {
+            await axios.put("http://localhost:5000/update-user", { payload }).then(async res => {
 
-            await uploadBytes(proPicRef, profilePic).
-                catch(err => console.error(err.message))
+                await uploadBytes(proPicRef, profilePic).
+                    catch(err => console.error(err.message))
 
-            setUserName(res.data.username)
-            setUploadedFlag(true)
-        }).catch(err => console.error(err.message))
+                setUserName(res.data.username)
+                setUploadedFlag(true)
+            }).catch(err => console.error(err.message))
+        }
 
     }
 
@@ -50,6 +61,8 @@ export default function ProfileModal() {
 
         await axios.post("http://localhost:5000/getPrevProPicId", { payload }).then(async res => {
             const prevProPicId = res.data.profilePicId
+
+            if (!prevProPicId) return
 
             const prevProPic = ref(storage, `proPics/${prevProPicId}`)
 
@@ -100,7 +113,15 @@ export default function ProfileModal() {
 
                     <label className="propic-changer">
 
-                        <img src={proPic ? proPic : defaultProPic} className="current-propic" />
+                        <img src=
+                            {
+                                proPic && uploadedFlag ? proPic :
+                                    currentImage ? currentImage :
+                                        !currentImage ? proPic :
+                                            defaultProPic
+                            }
+                            className="current-propic"
+                        />
 
                         <div className="plus-container">
                             <img src={plus} className='plus' />
