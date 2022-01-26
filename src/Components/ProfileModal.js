@@ -17,9 +17,15 @@ export default function ProfileModal() {
     const [currentImage, setCurrentImage] = useState(null)
 
     useEffect(() => {
+        var isMounted = true
 
-        setUserName(payload.username)
-        
+        if (isMounted) {
+            setUserName(payload.username)
+        }
+
+        return () => {
+            isMounted = false
+        }
     }, [profileModal])
 
     useEffect(() => {
@@ -28,7 +34,6 @@ export default function ProfileModal() {
         setCurrentImage(URL.createObjectURL(profilePic))
 
     }, [profilePic])
-
 
     const updateUser = async () => {
 
@@ -54,7 +59,6 @@ export default function ProfileModal() {
                 setUploadedFlag(true)
             }).catch(err => console.error(err.message))
         }
-
     }
 
     const deletePrevPic = async () => {
@@ -113,13 +117,13 @@ export default function ProfileModal() {
 
                     <label className="propic-changer">
 
-                        <img src=
-                            {
-                                proPic && uploadedFlag ? proPic :
-                                    currentImage ? currentImage :
+                        <img src={
+                            proPic && !uploadedFlag ? proPic :
+                                currentImage ? currentImage :
+                                    !proPic && !currentImage ? defaultProPic :
                                         !currentImage ? proPic :
                                             defaultProPic
-                            }
+                        }
                             className="current-propic"
                         />
 

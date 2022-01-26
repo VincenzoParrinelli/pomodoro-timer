@@ -65,6 +65,10 @@ body {
                 opacity: 1;
             }
 
+            &:active {
+                transform: translate(0, 2px);
+            }
+
             &[name = pomodoroBtn] {
                 background-color: rgba(221,102,98,255);
                 transition: background-color 1s;

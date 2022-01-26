@@ -7,7 +7,8 @@ import bin from "../Icons/bin.png"
 import "./UserDropdown.scss"
 import { UserContext, ProPicContext } from '../Router'
 import axios from "axios"
-import { storage } from '../base'
+import { app, storage } from '../base'
+import { getAuth, deleteUser } from "firebase/auth"
 import { getDownloadURL, ref, deleteObject } from "firebase/storage"
 
 
@@ -16,19 +17,31 @@ export default function UserDropdown() {
     const [profileModal, setProfileModal] = useState(false)
     const body = useRef(null)
 
-    const { setIsLogged, payload, setPayload } = useContext(UserContext)
+    const { isLogged, setIsLogged, payload, setPayload } = useContext(UserContext)
     const { profilePicId, uploadedFlag, proPic, setProPic } = useContext(ProPicContext)
 
     useEffect(async () => {
-        await axios.post("http://localhost:5000/getPrevProPicId", { payload }).then(async (res) => {
 
-            var proPicRef = ref(storage, `proPics/${res.data.profilePicId}`)
+        var isMounted = true
 
-            await getDownloadURL(proPicRef).then(pic => {
-                setProPic(pic)
+        if (isMounted) {
 
+            if (!payload.profilePicId) return
+
+            await axios.post("http://localhost:5000/getPrevProPicId", { payload }).then(async (res) => {
+
+                var proPicRef = ref(storage, `proPics/${res.data.profilePicId}`)
+
+                await getDownloadURL(proPicRef).then(pic => {
+                    setProPic(pic)
+
+                }).catch(err => console.error(err.message))
             }).catch(err => console.error(err.message))
-        }).catch(err => console.error(err.message))
+        }
+
+        return () => {
+            isMounted = false
+        }
     }, [])
 
     useEffect(async () => {
@@ -67,10 +80,16 @@ export default function UserDropdown() {
         setUserDropdown(false)
     }
 
-    const Logout = () => {
+    const Logout = async () => {
         setIsLogged(false)
         setPayload(null)
-        setUserDropdown(false)
+        const auth = getAuth(app)
+
+        await auth.signOut().then(() => {
+            setUserDropdown(false)
+
+        }).catch(err => console.error(err.message))
+     
     }
 
     const deleteAccount = async () => {
@@ -87,6 +106,12 @@ export default function UserDropdown() {
             }).then(async res => {
                 if (res.data.isDeleted !== 0) {
                     setPayload(null)
+
+                    const auth = getAuth(app)
+                    const user = auth.currentUser
+
+                    await deleteUser(user).catch(err => console.error(err.message))
+
                     setIsLogged(false)
                 }
             }).catch(err => console.error(err.message))

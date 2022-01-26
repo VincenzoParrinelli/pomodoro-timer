@@ -4,6 +4,8 @@ import axios from "axios"
 import logo from "../Icons/logo.png"
 import "./Login.scss"
 import { UserContext } from '../Router'
+import { app } from "../base"
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 
 export default function Login() {
 
@@ -29,9 +31,16 @@ export default function Login() {
 
         }).then((res) => {
 
-            setIsLogged(res.data.isLogged)
             setPayload(res.data.payload)
             setIsValid(res.data.isValid)
+            
+            const auth = getAuth(app)
+            
+            signInWithEmailAndPassword(auth, res.data.payload.email, res.data.payload.password).then(() => {
+                setIsLogged(res.data.isLogged)
+                
+            })
+            .catch(err => console.error(err.message))
             
         }).catch(err => console.error(err.message))
     }

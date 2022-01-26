@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import logo from "../Icons/logo.png"
 import { Link } from "react-router-dom"
+import { app } from "../base"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 import "./NewPassword.scss"
 
 export default function NewPassword() {
@@ -52,6 +54,10 @@ export default function NewPassword() {
             setIsValid(res.data.isValid)
             setIsCreated(res.data.isCreated)
 
+            const auth = getAuth(app)
+            
+            createUserWithEmailAndPassword(auth, res.data.data.email, res.data.hashedPassword)
+                .catch(err => console.error(err.message))
 
         }).catch(err => console.error(err.message))
     }
